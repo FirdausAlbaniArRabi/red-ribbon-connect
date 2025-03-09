@@ -1,17 +1,16 @@
 
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Droplet, LogIn, UserPlus, User, History, LayoutDashboard } from "lucide-react";
+import { Menu, X, Droplet, LogIn, UserPlus, User, History, LayoutDashboard, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  
-  // Check if user is logged in (mock for now)
-  const isLoggedIn = false;
+  const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,9 +28,14 @@ const NavBar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
+  const handleLogout = () => {
+    logout();
+    closeMenu();
+  };
+
   const navLinks = [
     { name: "Home", path: "/", icon: <Droplet className="w-4 h-4 mr-2" /> },
-    ...(isLoggedIn 
+    ...(isAuthenticated 
       ? [
           { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard className="w-4 h-4 mr-2" /> },
           { name: "Profile", path: "/profile", icon: <User className="w-4 h-4 mr-2" /> },
@@ -76,6 +80,17 @@ const NavBar = () => {
               {link.name}
             </Link>
           ))}
+          {isAuthenticated && (
+            <Button
+              variant="outline" 
+              size="sm"
+              onClick={logout}
+              className="text-blood border-blood hover:bg-blood/10"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          )}
           {location.pathname !== "/donation-form" && (
             <Button
               variant="default" 
@@ -122,6 +137,15 @@ const NavBar = () => {
                 {link.name}
               </Link>
             ))}
+            {isAuthenticated && (
+              <button
+                className="flex items-center py-2 text-base font-medium text-muted-foreground hover:text-foreground"
+                onClick={handleLogout}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </button>
+            )}
             {location.pathname !== "/donation-form" && (
               <Button
                 variant="default"
