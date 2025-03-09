@@ -10,6 +10,7 @@ interface User {
   phoneNumber?: string;
   address?: string;
   lastDonation?: Date | null;
+  nik?: string; // Added NIK field
 }
 
 // Define the context type
@@ -63,7 +64,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         bloodType: 'O+',
         phoneNumber: '+123456789',
         address: '123 Main St, City',
-        lastDonation: new Date(2023, 5, 15)
+        lastDonation: new Date(2023, 5, 15),
+        nik: '1234567890123456' // Added mock NIK
       };
       
       setUser(mockUser);

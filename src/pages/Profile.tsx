@@ -31,6 +31,12 @@ const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const profileFormSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
+  nik: z
+    .string()
+    .min(16, { message: "NIK must be 16 digits" })
+    .max(16, { message: "NIK must be 16 digits" })
+    .regex(/^\d+$/, { message: "NIK must contain only numbers" })
+    .optional(),
   bloodType: z.string().optional(),
   phoneNumber: z.string().optional(),
   address: z.string().optional(),
@@ -49,6 +55,7 @@ const Profile = () => {
     defaultValues: {
       name: user?.name || "",
       email: user?.email || "",
+      nik: user?.nik || "",
       bloodType: user?.bloodType || undefined,
       phoneNumber: user?.phoneNumber || "",
       address: user?.address || "",
@@ -117,6 +124,24 @@ const Profile = () => {
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input placeholder="john@example.com" type="email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="nik"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>NIK (Nomor Induk Kependudukan)</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="1234567890123456" 
+                          maxLength={16}
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
